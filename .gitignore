@@ -1,0 +1,7 @@
+*.swc
+*.prefs
+*.svn-base
+.actionScriptProperties
+.flexLibProperties
+.project
+entries

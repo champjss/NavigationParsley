@@ -1,0 +1,52 @@
+<overviews>
+    <packages>
+        <package name="com.adobe.cairngorm.navigation">
+            <shortDescription>
+                <![CDATA[
+					For additional information, 
+					see &lt;a href="https://sourceforge.net/adobe/cairngorm/HowToUseCairngormNavigation" 
+					target="_blank"&gt;the wiki&lt;/a&gt;
+				]]>
+            </shortDescription>
+            <description>
+                <![CDATA[
+					For additional information, 
+					see &lt;a href="https://sourceforge.net/adobe/cairngorm/HowToUseCairngormNavigation" 
+					target="_blank"&gt;the wiki&lt;/a&gt;
+				]]>
+            </description>
+        </package>
+        <package name="com.adobe.cairngorm.navigation.landmark">
+            <shortDescription>
+                <![CDATA[
+					For additional information, 
+					see &lt;a href="https://sourceforge.net/adobe/cairngorm/HowToUseCairngormNavigation" 
+					target="_blank"&gt;the wiki&lt;/a&gt;
+				]]>
+            </shortDescription>
+            <description>
+                <![CDATA[
+					For additional information, 
+					see &lt;a href="https://sourceforge.net/adobe/cairngorm/HowToUseCairngormNavigation" 
+					target="_blank"&gt;the wiki&lt;/a&gt;
+				]]>
+            </description>
+        </package>
+        <package name="com.adobe.cairngorm.navigation.waypoint">
+            <shortDescription>
+                <![CDATA[
+					For additional information, 
+					see &lt;a href="https://sourceforge.net/adobe/cairngorm/HowToUseCairngormNavigation" 
+					target="_blank"&gt;the wiki&lt;/a&gt;
+				]]>
+            </shortDescription>
+            <description>
+                <![CDATA[
+					For additional information, 
+					see &lt;a href="https://sourceforge.net/adobe/cairngorm/HowToUseCairngormNavigation" 
+					target="_blank"&gt;the wiki&lt;/a&gt;
+				]]>
+            </description>
+        </package>
+    </packages>
+</overviews>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<project name="Cairngorm Library" default="asdocs" basedir=".">
+
+	<property file="build.properties" />
+	
+	<target name="asdocs">
+		<exec executable="${flex.dir}/bin/asdoc.exe" failonerror="true">	
+	        <arg line="-doc-sources ${basedir}/src ../Navigation/src" />			
+			<arg line="-external-library-path libs" />
+			
+			<arg value="-window-title" />
+			<arg value="${ant.project.name} Docs" />
+			
+			<arg line="-package-description-file asDocPackageFile.xml" />
+
+	        <arg line="-output ${basedir}/docs" />
+		</exec>
+	</target>	
+	
+</project>	

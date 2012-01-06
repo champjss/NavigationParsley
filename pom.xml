@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.adobe.cairngorm</groupId>
+		<artifactId>libraries</artifactId>
+		<version>3.0.22-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<version>1.8-SNAPSHOT</version>
+	<artifactId>navigationParsley</artifactId>
+	<packaging>swc</packaging>
+	<name>${project.groupId} ${project.artifactId} ${project.version}</name>
+	<description>${project.groupId} ${project.artifactId} ${project.version}</description>
+
+	<properties>
+		<maven.test.skip>true</maven.test.skip>
+		<!-- TODO make it false cf. https://bugs.adobe.com/jira/browse/CGM-60 -->
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.adobe.cairngorm</groupId>
+			<artifactId>navigation</artifactId>
+			<version>${project.version}</version>
+			<type>swc</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.spicefactory</groupId>
+			<artifactId>${parsley.artifactId}</artifactId>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>org.spicefactory</groupId>
+			<artifactId>spicelib-flex</artifactId>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>org.spicefactory</groupId>
+			<artifactId>cinnamon</artifactId>
+			<type>swc</type>
+		</dependency>		
+		
+		<dependency>
+			<groupId>com.adobe.flexunit</groupId>
+			<artifactId>flexunit</artifactId>
+			<type>swc</type>			
+		</dependency>		
+
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
+
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>${flex-mojos.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.adobe.flex</groupId>
+						<artifactId>compiler</artifactId>
+						<version>${flex.sdk.version}</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+				<extensions>true</extensions>
+
+				<configuration>
+					<debug>${flex-debug}</debug>
+					<optimize>${flex-optimize}</optimize>
+					<verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
+					<targetPlayer>${player.version}</targetPlayer>
+					<includeSources>
+						<param>${project.build.sourceDirectory}</param>
+					</includeSources>
+					<allowSourcePathOverlap>true</allowSourcePathOverlap>
+					<showWarnings>true</showWarnings>
+
+					<includeNamespaces>
+						<namespace>http://ns.adobe.com/cairngorm</namespace>
+					</includeNamespaces>
+					<namespaces>
+						<namespace>
+							<uri>http://ns.adobe.com/cairngorm</uri>
+							<manifest>${project.build.sourceDirectory}/manifest.xml</manifest>
+						</namespace>
+					</namespaces>
+					<includeFiles>
+						<file>${project.build.sourceDirectory}/design.xml</file>
+					</includeFiles>
+
+					<keepAs3Metadatas>
+						<name>Target</name>
+						<name>Enter</name>
+						<name>Exit</name>
+						<name>EnterInterceptor</name>
+						<name>ExitInterceptor</name>
+						<name>Landmark</name>
+						<name>Waypoint</name>
+						<name>SelectedIndex</name>
+						<name>SelectedName</name>
+					</keepAs3Metadatas>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
