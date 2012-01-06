@@ -35,10 +35,8 @@ package com.adobe.cairngorm.navigation.waypoint
     import org.spicefactory.parsley.core.context.Context;
     import org.spicefactory.parsley.core.events.ContextEvent;
     import org.spicefactory.parsley.core.lifecycle.ManagedObject;
-    import org.spicefactory.parsley.core.registry.ObjectProcessor;
-    import org.spicefactory.parsley.core.registry.ObjectProcessorFactory;
+    import org.spicefactory.parsley.core.processor.ObjectProcessor;
     import org.spicefactory.parsley.core.scope.ScopeManager;
-    import org.spicefactory.parsley.processor.util.ObjectProcessorFactories;
 
     public class WaypointProcessor implements ObjectProcessor
     {
@@ -58,11 +56,10 @@ package com.adobe.cairngorm.navigation.waypoint
 
         private var waypointHandler:WaypointHandler;
 
-        public function WaypointProcessor(targetObject:ManagedObject, type:Class,
+        public function WaypointProcessor(type:Class,
                                           mode:String, name:String, scopeManager:ScopeManager,
                                           domain:ApplicationDomain)
         {
-            this.targetObject = targetObject;
             this.type = type;
             this.mode = mode;
             this.name = name;
@@ -71,23 +68,17 @@ package com.adobe.cairngorm.navigation.waypoint
 
             controller = NavigationParsleyAdaptorFactory.getInstance(scopeManager);
         }
-
-        public static function newFactory(type:Class,
-                                          mode:String, name:String, scopeManager:ScopeManager,
-                                          domain:ApplicationDomain):ObjectProcessorFactory
-        {
-            var params:Array = [ type, mode, name, scopeManager, domain ];
-            return ObjectProcessorFactories.newFactory(WaypointProcessor, params);
-        }
-
-        public function preInit():void
-        {
-            var view:UIComponent = UIComponent(targetObject.instance);
-
-            waypointHandler = new WaypointHandler(controller.controller, name);
-            waypointHandler.addEventListener(NavigationEvent.NAVIGATE_TO, waitForParsleyContext);			
+		
+		public function init(target:ManagedObject):void
+		{
+			this.targetObject = target;
+			
+			var view:UIComponent = UIComponent(targetObject.instance);
+			
+			waypointHandler = new WaypointHandler(controller.controller, name);
+			waypointHandler.addEventListener(NavigationEvent.NAVIGATE_TO, waitForParsleyContext);			
 			waypointHandler.createWaypoint(view, mode, type, isWaypointType);
-        }
+		}
 
         private function isWaypointType(waypointType:Class):Boolean
         {
@@ -125,12 +116,12 @@ package com.adobe.cairngorm.navigation.waypoint
         {
             scopeManager.dispatchMessage(event);
         }
-
-        public function postDestroy():void
-        {
-            SelectedStatesFactory.dispose(waypointHandler.name);
+		
+		public function destroy(target:ManagedObject):void
+		{
+			SelectedStatesFactory.dispose(waypointHandler.name);
 			waypointHandler.removeEventListener(NavigationEvent.NAVIGATE_TO, waitForParsleyContext);
 			waypointHandler.destroy();
-        }
+		}
     }
 }

@@ -22,8 +22,8 @@
  */
 package com.adobe.cairngorm.navigation.state
 {
-	import org.spicefactory.parsley.config.ObjectDefinitionDecorator;
-	import org.spicefactory.parsley.dsl.ObjectDefinitionBuilder;
+	import org.spicefactory.parsley.core.builder.ObjectDefinitionBuilder;
+	import org.spicefactory.parsley.core.builder.ObjectDefinitionDecorator;
 
 	[Metadata(name="SelectedName", types="property")]
 	public class SelectedNameDecorator implements ObjectDefinitionDecorator
@@ -33,7 +33,7 @@ package com.adobe.cairngorm.navigation.state
 		
 		public function decorate(builder:ObjectDefinitionBuilder):void
 		{
-			builder.lifecycle().processorFactory(SelectedNameProcessor.newFactory(property));
+			builder.process(new SelectedNameProcessor(property));
 		}
 	}
 }

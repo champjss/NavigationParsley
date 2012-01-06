@@ -37,7 +37,7 @@ package com.adobe.cairngorm.navigation.core
 
 		[Bindable]
 		public var messageType:Class=NavigationEvent;
-
+		
 		[Bindable]
 		public var selector:*=NavigationEvent.NAVIGATE_AWAY;
 
@@ -46,6 +46,11 @@ package com.adobe.cairngorm.navigation.core
 		public function get controller():NavigationController
 		{
 			return _controller;
+		}
+		
+		public function get type():Class
+		{
+			return NavigationEvent;
 		}
 
 		public function NavigateAwayInterceptor(controller:NavigationController)
@@ -57,7 +62,7 @@ package com.adobe.cairngorm.navigation.core
 		{
 			processor.suspend();
 			
-			var event:NavigationEvent=NavigationEvent(processor.message);
+			var event:NavigationEvent=NavigationEvent(processor.message.instance);
 			if(controller.navigateAway(event.destination))
 			{
 				processor.resume();

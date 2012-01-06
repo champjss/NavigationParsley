@@ -22,9 +22,9 @@
  */
 package com.adobe.cairngorm.navigation.landmark
 {
-    import org.spicefactory.parsley.config.ObjectDefinitionDecorator;
+    import org.spicefactory.parsley.core.builder.ObjectDefinitionBuilder;
+    import org.spicefactory.parsley.core.builder.ObjectDefinitionDecorator;
     import org.spicefactory.parsley.core.scope.ScopeManager;
-    import org.spicefactory.parsley.dsl.ObjectDefinitionBuilder;
 
     public class AbstractNavigationDecorator implements ObjectDefinitionDecorator
     {
@@ -59,13 +59,13 @@ package com.adobe.cairngorm.navigation.landmark
 
         private function performDecorate(builder:ObjectDefinitionBuilder):void
         {
-            var scopeManager:ScopeManager = builder.config.context.scopeManager;
+            var scopeManager:ScopeManager = builder.registry.context.scopeManager;
 
             var params:NavigationParameters = new NavigationParameters(time, action,
                                                                        isInterceptor,
                                                                        method, scopeManager,
                                                                        builder.typeInfo);
-            builder.lifecycle().processorFactory(NavigationProcessor.newFactory(params));
+			builder.process(new NavigationProcessor(params));
         }
     }
 }

@@ -22,8 +22,8 @@
  */
 package com.adobe.cairngorm.navigation.waypoint
 {
-    import org.spicefactory.parsley.config.ObjectDefinitionDecorator;
-    import org.spicefactory.parsley.dsl.ObjectDefinitionBuilder;
+    import org.spicefactory.parsley.core.builder.ObjectDefinitionBuilder;
+    import org.spicefactory.parsley.core.builder.ObjectDefinitionDecorator;
 
     [Metadata(name="Waypoint", types="class")]
     public class WaypointDecorator implements ObjectDefinitionDecorator
@@ -69,11 +69,7 @@ package com.adobe.cairngorm.navigation.waypoint
 
         public function decorate(builder:ObjectDefinitionBuilder):void
         {
-            builder.lifecycle().processorFactory(WaypointProcessor.newFactory(type,
-                                                                              mode,
-                                                                              name,
-                                                                              builder.config.context.scopeManager,
-                                                                              builder.config.domain));
+			builder.process(new WaypointProcessor(type, mode, name, builder.registry.context.scopeManager, builder.registry.domain));
         }
     }
 }

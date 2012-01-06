@@ -49,6 +49,11 @@ package com.adobe.cairngorm.navigation.core
 		{
 			return _controller;
 		}
+		
+		public function get type():Class
+		{
+			return NavigationEvent;
+		}
 
 		public var processorInterceptor:MessageProcessorInterceptor;
 
@@ -80,7 +85,7 @@ package com.adobe.cairngorm.navigation.core
 		{
 			processor.suspend();
 			
-			var event:NavigationEvent=NavigationEvent(processor.message);
+			var event:NavigationEvent=NavigationEvent(processor.message.instance);
 			
 			processorInterceptor.registerProcessor(event.destination, processor);
 			

@@ -22,41 +22,35 @@
  */
 package com.adobe.cairngorm.navigation.state
 {
-	import com.adobe.cairngorm.navigation.landmark.LandmarkProcessorFactory;
+	import com.adobe.cairngorm.navigation.landmark.LandmarkProcessor;
 	
 	import org.spicefactory.lib.errors.IllegalStateError;
 	import org.spicefactory.lib.reflect.ClassInfo;
 	import org.spicefactory.lib.reflect.Property;
 	import org.spicefactory.parsley.core.lifecycle.ManagedObject;
-	import org.spicefactory.parsley.core.registry.ObjectProcessor;
-	import org.spicefactory.parsley.core.registry.ObjectProcessorFactory;
-	import org.spicefactory.parsley.processor.util.ObjectProcessorFactories;
+	import org.spicefactory.parsley.core.processor.ObjectProcessor;
 
 	public class SelectedNameProcessor implements ObjectProcessor, ISelectedName
 	{
 		private var targetObject:ManagedObject;		
 		private var property:String;
 		
-		public function SelectedNameProcessor(targetObject:ManagedObject, property:String)
+		public function SelectedNameProcessor(property:String)
 		{
-			this.targetObject = targetObject;
 			this.property = property;	
-		}		
-		
-		public static function newFactory(property:String):ObjectProcessorFactory
-		{			
-			return ObjectProcessorFactories.newFactory(SelectedNameProcessor, [property]);
 		}
 		
-		private var target:Property;				
+		private var targetProperty:Property;				
 		
 		private var state:SelectedStates;
 		
-		public function preInit():void
+		public function init(target:ManagedObject):void
 		{
+			this.targetObject = target;
+			
 			var info:ClassInfo = targetObject.definition.type;
-			target = info.getProperty(property);
-			if(!target.writable)
+			targetProperty = info.getProperty(property);
+			if(!targetProperty.writable)
 			{
 				throw new IllegalStateError("Property " + property + " must be writable.");	
 			}
@@ -67,7 +61,7 @@ package com.adobe.cairngorm.navigation.state
 				state.subscribe(this);
 		}
 		
-		public function postDestroy():void
+		public function destroy(target:ManagedObject):void
 		{
 			if(state)
 				state.unsubscribe(this);
@@ -75,12 +69,12 @@ package com.adobe.cairngorm.navigation.state
 		
 		private function findDestinationFromLandmark():String
 		{
-			var factories:Array = targetObject.definition.processorFactories;
-			for each (var item:ObjectProcessorFactory in factories)
+			var processors:Array = targetObject.definition.processors;
+			for each (var processor:ObjectProcessor in processors)
 			{
-				if (item is LandmarkProcessorFactory)
+				if (processor is LandmarkProcessor)
 				{
-					return LandmarkProcessorFactory(item).name;
+					return LandmarkProcessor(processor).name;
 				}
 			}
 			return null;
@@ -91,9 +85,9 @@ package com.adobe.cairngorm.navigation.state
 		public function get selectedName():String
 		{
 			var value:String;
-			if(target.readable)
+			if(targetProperty.readable)
 			{
-				value = target.getValue(targetObject.instance) as String;
+				value = targetProperty.getValue(targetObject.instance) as String;
 			}
 			else
 			{
@@ -105,7 +99,7 @@ package com.adobe.cairngorm.navigation.state
 		public function set selectedName(value:String):void
 		{
 			_selectedName = value;
-			target.setValue(targetObject.instance, value);
+			targetProperty.setValue(targetObject.instance, value);
 		}		
 	}
 }

@@ -38,9 +38,7 @@ package com.adobe.cairngorm.navigation.landmark
     import org.spicefactory.parsley.core.events.ContextEvent;
     import org.spicefactory.parsley.core.lifecycle.ManagedObject;
     import org.spicefactory.parsley.core.messaging.MessageProcessor;
-    import org.spicefactory.parsley.core.registry.ObjectProcessor;
-    import org.spicefactory.parsley.core.registry.ObjectProcessorFactory;
-    import org.spicefactory.parsley.processor.util.ObjectProcessorFactories;
+    import org.spicefactory.parsley.core.processor.ObjectProcessor;
 
     public class NavigationProcessor implements ObjectProcessor
     {
@@ -56,57 +54,53 @@ package com.adobe.cairngorm.navigation.landmark
 
         private var waypointHandler:WaypointHandler;
 
-        private var target:Method;
+        private var targetMethod:Method;
 
-        public function NavigationProcessor(targetObject:ManagedObject, params:NavigationParameters)
+        public function NavigationProcessor(params:NavigationParameters)
         {
-            this.targetObject = targetObject;
             this.controller = NavigationParsleyAdaptorFactory.getInstance(params.scopeManager);
             this.navigationParams = params;
             this.action = navigationParams.action;
         }
 
-        public static function newFactory(params:NavigationParameters):ObjectProcessorFactory
-        {
-            return ObjectProcessorFactories.newFactory(NavigationProcessor, [ params ]);
-        }
-
         private function findDestinationFromLandmark():void
         {
-            var factories:Array = targetObject.definition.processorFactories;
-            for each (var item:ObjectProcessorFactory in factories)
+            var processors:Array = targetObject.definition.processors;
+            for each (var processor:ObjectProcessor in processors)
             {
-                if (item is LandmarkProcessorFactory)
+                if (processor is LandmarkProcessor)
                 {
-                    destination = LandmarkProcessorFactory(item).name;
+                    destination = LandmarkProcessor(processor).name;
                     break;
                 }
             }
         }
-
-        public function preInit():void
-        {
-            findDestinationFromLandmark();
+		
+		public function init(target:ManagedObject):void
+		{
+			this.targetObject = target;
+			
+			findDestinationFromLandmark();
 			if(destination == null || destination == "")
 			{
 				throw new IllegalStateError("Could not find related Landmark defintion in class: " 
 					+ targetObject.instance + " Each Enter/Exit defintion must relate to a Landmark defintion");	
 			}
 			
-            var info:ClassInfo = navigationParams.typeInfo;
-            target = info.getMethod(navigationParams.method);
-
-            var navigation:NavigationController = controller.controller;
-
-            if (action == NavigationActionName.ENTER)
-            {
-                action = findActionFromEnter();
-            }
-            var type:String = NavigationActionName.getEventName(destination, action);
-            controller.addEventListener(type, waitForParsleyContext);
-
-            navigation.registerDestination(destination, action);
-        }
+			var info:ClassInfo = navigationParams.typeInfo;
+			targetMethod = info.getMethod(navigationParams.method);
+			
+			var navigation:NavigationController = controller.controller;
+			
+			if (action == NavigationActionName.ENTER)
+			{
+				action = findActionFromEnter();
+			}
+			var type:String = NavigationActionName.getEventName(destination, action);
+			controller.addEventListener(type, waitForParsleyContext);
+			
+			navigation.registerDestination(destination, action);
+		}
 
         private function findActionFromEnter():String
         {
@@ -124,13 +118,13 @@ package com.adobe.cairngorm.navigation.landmark
             }
             return action;
         }
-
-        public function postDestroy():void
-        {
-            var type:String = NavigationActionName.getEventName(destination, action);
-            controller.removeEventListener(type, waitForParsleyContext);
-            NavigationParsleyAdaptorFactory.dispose(navigationParams.scopeManager);
-        }
+		
+		public function destroy(target:ManagedObject):void
+		{
+			var type:String = NavigationActionName.getEventName(destination, action);
+			controller.removeEventListener(type, waitForParsleyContext);
+			NavigationParsleyAdaptorFactory.dispose(navigationParams.scopeManager);
+		}
 
 		private var pendingEvents:Array = new Array();
 		
@@ -180,11 +174,11 @@ package com.adobe.cairngorm.navigation.landmark
         {
             if (processor)
             {
-                target.invoke(targetObject.instance, [ processor ]);
+                targetMethod.invoke(targetObject.instance, [ processor ]);
             }
             else
             {
-                target.invoke(targetObject.instance, []);
+				targetMethod.invoke(targetObject.instance, []);
             }
         }
     }

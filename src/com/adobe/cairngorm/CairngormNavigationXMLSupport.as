@@ -32,7 +32,7 @@ package com.adobe.cairngorm
     import com.adobe.cairngorm.navigation.waypoint.WaypointDecorator;
     
     import org.spicefactory.parsley.core.bootstrap.BootstrapConfig;
-    import org.spicefactory.parsley.flex.tag.builder.BootstrapConfigProcessor;
+    import org.spicefactory.parsley.core.bootstrap.BootstrapConfigProcessor;
     import org.spicefactory.parsley.xml.mapper.XmlConfigurationNamespaceRegistry;
 
     /**

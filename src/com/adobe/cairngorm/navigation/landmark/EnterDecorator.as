@@ -23,8 +23,8 @@
 package com.adobe.cairngorm.navigation.landmark
 {
     import com.adobe.cairngorm.navigation.core.NavigationActionName;
-
-    import org.spicefactory.parsley.dsl.ObjectDefinitionBuilder;
+    
+    import org.spicefactory.parsley.core.builder.ObjectDefinitionBuilder;
 
     [Metadata(name="Enter", types="method")]
 

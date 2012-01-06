@@ -33,7 +33,7 @@ package com.adobe.cairngorm
     
     import org.spicefactory.lib.reflect.Metadata;
     import org.spicefactory.parsley.core.bootstrap.BootstrapConfig;
-    import org.spicefactory.parsley.flex.tag.builder.BootstrapConfigProcessor;
+    import org.spicefactory.parsley.core.bootstrap.BootstrapConfigProcessor;
 
     public class CairngormNavigationSupport implements BootstrapConfigProcessor
     {

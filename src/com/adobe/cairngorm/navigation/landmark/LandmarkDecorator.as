@@ -22,8 +22,8 @@
  */
 package com.adobe.cairngorm.navigation.landmark
 {
-    import org.spicefactory.parsley.config.ObjectDefinitionDecorator;
-    import org.spicefactory.parsley.dsl.ObjectDefinitionBuilder;
+    import org.spicefactory.parsley.core.builder.ObjectDefinitionBuilder;
+    import org.spicefactory.parsley.core.builder.ObjectDefinitionDecorator;
 
     [Metadata(name="Landmark", types="class")]
     public class LandmarkDecorator implements ObjectDefinitionDecorator
@@ -40,8 +40,7 @@ package com.adobe.cairngorm.navigation.landmark
 
         public function decorate(builder:ObjectDefinitionBuilder):void
         {
-            builder.lifecycle().processorFactory(LandmarkProcessor.newFactory(name,
-                                                                              builder.config.context.scopeManager));
+			builder.process(new LandmarkProcessor(name, builder.registry.context.scopeManager));
         }
     }
 }

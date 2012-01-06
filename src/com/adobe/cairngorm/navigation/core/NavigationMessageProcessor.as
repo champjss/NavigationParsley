@@ -29,9 +29,9 @@ package com.adobe.cairngorm.navigation.core
 	import mx.logging.ILogger;
 	
 	import org.spicefactory.parsley.core.context.Context;
+	import org.spicefactory.parsley.core.messaging.Message;
 	import org.spicefactory.parsley.core.messaging.MessageProcessor;
 	import org.spicefactory.parsley.core.messaging.MessageState;
-	import org.spicefactory.parsley.core.messaging.command.Command;
 
 	//TODO: Refactor
 	public class NavigationMessageProcessor implements MessageProcessor
@@ -60,19 +60,19 @@ package com.adobe.cairngorm.navigation.core
 			this.newProcessor=newProcessor;
 		}
 		
-		public function get message():Object
+		public function get message():Message
 		{
 			return processor.message;
 		}		
 
 		public function get selector():*
 		{
-			return processor.selector;
+			return processor.message.selector;
 		}
 		
 		public function get	senderContext():Context
 		{
-			return processor.senderContext;
+			return processor.message.senderContext;
 		}		
 		
 		public function get	state():MessageState
@@ -84,11 +84,6 @@ package com.adobe.cairngorm.navigation.core
 		{			
 			processor.cancel();
 		}
-		
-		public function createCommand(returnValue:*):Command
-		{
-			return processor.createCommand(returnValue);
-		}		
 
 		//deprecated
 		public function proceed():void
@@ -100,7 +95,7 @@ package com.adobe.cairngorm.navigation.core
 		//at the last navigation interceptor destination.
 		public function resume():void
 		{			
-			var event:NavigationEvent=NavigationEvent(processor.message);
+			var event:NavigationEvent=NavigationEvent(processor.message.instance);
 
 			if (action == NavigationActionName.ENTER_INTERCEPT)
 			{

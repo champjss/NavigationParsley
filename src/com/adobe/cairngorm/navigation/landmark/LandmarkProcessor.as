@@ -31,8 +31,7 @@ package com.adobe.cairngorm.navigation.landmark
     import org.spicefactory.parsley.core.context.Context;
     import org.spicefactory.parsley.core.events.ContextEvent;
     import org.spicefactory.parsley.core.lifecycle.ManagedObject;
-    import org.spicefactory.parsley.core.registry.ObjectProcessor;
-    import org.spicefactory.parsley.core.registry.ObjectProcessorFactory;
+    import org.spicefactory.parsley.core.processor.ObjectProcessor;
     import org.spicefactory.parsley.core.scope.ScopeManager;
 
     public class LandmarkProcessor implements ObjectProcessor
@@ -50,36 +49,31 @@ package com.adobe.cairngorm.navigation.landmark
 
         private var controller:NavigationParsleyAdaptor;
 
-        public function LandmarkProcessor(targetObject:ManagedObject, name:String,
+        public function LandmarkProcessor(name:String,
                                           scopeManager:ScopeManager)
         {
-            this.targetObject = targetObject;
             _name = name;
             this.scopeManager = scopeManager;
 
             controller = NavigationParsleyAdaptorFactory.getInstance(scopeManager);
             controller.addEventListener(name, waitForParsleyContext);
         }
-
-        public static function newFactory(name:String,
-                                          scopeManager:ScopeManager):ObjectProcessorFactory
-        {
-            return new LandmarkProcessorFactory(name, scopeManager);
-        }
-
-        public function preInit():void
-        {
-            var state:SelectedStates = SelectedStatesFactory.getInstance(name);
-            state.subscribe(targetObject.instance);
-        }
-
-        public function postDestroy():void
-        {
-            var state:SelectedStates = SelectedStatesFactory.getInstance(name);
-            state.unsubscribe(targetObject.instance);
-
-            controller.removeEventListener(name, waitForParsleyContext);
-        }
+		
+		public function init(target:ManagedObject):void
+		{
+			this.targetObject = target;
+			
+			var state:SelectedStates = SelectedStatesFactory.getInstance(name);
+			state.subscribe(target.instance);
+		}
+		
+		public function destroy(target:ManagedObject):void
+		{
+			var state:SelectedStates = SelectedStatesFactory.getInstance(name);
+			state.unsubscribe(target.instance);
+			
+			controller.removeEventListener(name, waitForParsleyContext);
+		}
 		
 		private var pendingEvents:Array = new Array();
 		
