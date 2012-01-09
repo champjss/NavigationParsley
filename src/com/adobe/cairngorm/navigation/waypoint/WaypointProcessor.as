@@ -36,9 +36,10 @@ package com.adobe.cairngorm.navigation.waypoint
     import org.spicefactory.parsley.core.events.ContextEvent;
     import org.spicefactory.parsley.core.lifecycle.ManagedObject;
     import org.spicefactory.parsley.core.processor.ObjectProcessor;
+    import org.spicefactory.parsley.core.processor.StatefulProcessor;
     import org.spicefactory.parsley.core.scope.ScopeManager;
 
-    public class WaypointProcessor implements ObjectProcessor
+    public class WaypointProcessor implements ObjectProcessor, StatefulProcessor
     {
         private var targetObject:ManagedObject;
 
@@ -123,5 +124,10 @@ package com.adobe.cairngorm.navigation.waypoint
 			waypointHandler.removeEventListener(NavigationEvent.NAVIGATE_TO, waitForParsleyContext);
 			waypointHandler.destroy();
 		}
-    }
+		
+		public function clone():StatefulProcessor
+		{
+			return new WaypointProcessor(type, mode, name, scopeManager, domain);
+		}
+	}
 }

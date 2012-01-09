@@ -32,9 +32,10 @@ package com.adobe.cairngorm.navigation.landmark
     import org.spicefactory.parsley.core.events.ContextEvent;
     import org.spicefactory.parsley.core.lifecycle.ManagedObject;
     import org.spicefactory.parsley.core.processor.ObjectProcessor;
+    import org.spicefactory.parsley.core.processor.StatefulProcessor;
     import org.spicefactory.parsley.core.scope.ScopeManager;
 
-    public class LandmarkProcessor implements ObjectProcessor
+    public class LandmarkProcessor implements ObjectProcessor, StatefulProcessor
     {
         private var targetObject:ManagedObject;
 
@@ -107,5 +108,10 @@ package com.adobe.cairngorm.navigation.landmark
             var state:SelectedStates = SelectedStatesFactory.getInstance(name);
             state.selectedName = event.newDestination;
         }
+		
+		public function clone():StatefulProcessor
+		{
+			return new LandmarkProcessor(name, scopeManager);
+		}
     }
 }

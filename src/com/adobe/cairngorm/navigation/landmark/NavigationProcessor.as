@@ -39,8 +39,9 @@ package com.adobe.cairngorm.navigation.landmark
     import org.spicefactory.parsley.core.lifecycle.ManagedObject;
     import org.spicefactory.parsley.core.messaging.MessageProcessor;
     import org.spicefactory.parsley.core.processor.ObjectProcessor;
+    import org.spicefactory.parsley.core.processor.StatefulProcessor;
 
-    public class NavigationProcessor implements ObjectProcessor
+    public class NavigationProcessor implements ObjectProcessor, StatefulProcessor
     {
         private var targetObject:ManagedObject;
 
@@ -181,5 +182,10 @@ package com.adobe.cairngorm.navigation.landmark
 				targetMethod.invoke(targetObject.instance, []);
             }
         }
+		
+		public function clone():StatefulProcessor
+		{
+			return new NavigationProcessor(navigationParams);
+		}
     }
 }

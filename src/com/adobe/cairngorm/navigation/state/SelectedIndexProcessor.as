@@ -29,8 +29,9 @@ package com.adobe.cairngorm.navigation.state
 	import org.spicefactory.lib.reflect.Property;
 	import org.spicefactory.parsley.core.lifecycle.ManagedObject;
 	import org.spicefactory.parsley.core.processor.ObjectProcessor;
+	import org.spicefactory.parsley.core.processor.StatefulProcessor;
 
-	public class SelectedIndexProcessor implements ObjectProcessor, ISelectedIndex
+	public class SelectedIndexProcessor implements ObjectProcessor, StatefulProcessor, ISelectedIndex
 	{
 		private var targetObject:ManagedObject;		
 		private var property:String;
@@ -100,6 +101,11 @@ package com.adobe.cairngorm.navigation.state
 		{
 			_selectedIndex = value;
 			targetProperty.setValue(targetObject.instance, value);
-		}		
+		}
+		
+		public function clone():StatefulProcessor
+		{
+			return new SelectedIndexProcessor(property);
+		}
 	}
 }
