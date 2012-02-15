@@ -39,6 +39,7 @@ package com.adobe.cairngorm.navigation.landmark
     import org.spicefactory.parsley.core.lifecycle.ManagedObject;
     import org.spicefactory.parsley.core.messaging.MessageProcessor;
     import org.spicefactory.parsley.core.processor.ObjectProcessor;
+    import org.spicefactory.parsley.core.processor.ObjectProcessorConfig;
     import org.spicefactory.parsley.core.processor.StatefulProcessor;
 
     public class NavigationProcessor implements ObjectProcessor, StatefulProcessor
@@ -67,8 +68,9 @@ package com.adobe.cairngorm.navigation.landmark
         private function findDestinationFromLandmark():void
         {
             var processors:Array = targetObject.definition.processors;
-            for each (var processor:ObjectProcessor in processors)
+            for each (var processorConfig:ObjectProcessorConfig in processors)
             {
+				var processor:ObjectProcessor = processorConfig.processor;
                 if (processor is LandmarkProcessor)
                 {
                     destination = LandmarkProcessor(processor).name;

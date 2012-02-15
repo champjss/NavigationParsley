@@ -29,6 +29,7 @@ package com.adobe.cairngorm.navigation.state
 	import org.spicefactory.lib.reflect.Property;
 	import org.spicefactory.parsley.core.lifecycle.ManagedObject;
 	import org.spicefactory.parsley.core.processor.ObjectProcessor;
+	import org.spicefactory.parsley.core.processor.ObjectProcessorConfig;
 	import org.spicefactory.parsley.core.processor.StatefulProcessor;
 
 	public class SelectedIndexProcessor implements ObjectProcessor, StatefulProcessor, ISelectedIndex
@@ -71,8 +72,9 @@ package com.adobe.cairngorm.navigation.state
 		private function findDestinationFromLandmark():String
 		{
 			var processors:Array = targetObject.definition.processors;
-			for each (var processor:ObjectProcessor in processors)
+			for each (var processorConfig:ObjectProcessorConfig in processors)
 			{
+				var processor:ObjectProcessor = processorConfig.processor;
 				if (processor is LandmarkProcessor)
 				{
 					return LandmarkProcessor(processor).name;
